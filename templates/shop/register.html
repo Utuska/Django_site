@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title% %}{% endblock %}
+
+{% block many %}
+{% endblock %}
+
+{% block content %}
+<div class="col-md-9">
+  {% if messages %}
+
+  {% for message in messages %}
+          {{ message.tags }}
+
+  {% endfor %}
+
+  {% endif %}
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary btn-block">
+        Отправить
+    </button>
+
+</form>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}{% load static %}
+
+{% block title% %}{% if category %}{{ category.title }}{% else %}Products{% endif %}{% endblock %}
+
+{% block many %}
+{% if categories %}
+    {% for cat in categories %}
+        <a class="dropdown-item" href="{% url 'shop:product_list_category' cat.slug %}">{{ cat.name }}<br></a>
+    {% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="product-detail">
+        <h2>{{ product.name }}</h2>
+        <h3>Вернуться в категорию: <a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h3>
+        <p class="price">Цена: Руб.{{ product.price }}</p>
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
+        {{ product.description|linebreaks }}
+</div>
+
+{% if request.user.is_authenticated %}
+<form action="{% url 'cart:cart_add' product.id %}" method="post">
+    {% csrf_token %}
+    {{ cart_product_form }}
+    <input type="submit" value="Добавить в корзину">
+</form>
+{% else %}
+Авторизуйтесь чтобы добавить в корзину
+{% endif %}
+
+{% endblock %}
